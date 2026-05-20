@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISEH Core — The Energy That Never Stops</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4aa;
+            --secondary: #00b4d8;
+            --accent: #90e0ef;
+            --dark: #0a0f1a;
+            --darker: #050810;
+            --card: #0d1421;
+            --card-hover: #111b2e;
+            --text: #e6f1ff;
+            --text-muted: #8899aa;
+            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #00b4d8 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans Arabic', 'Inter', 'Space Grotesk', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+        .lang-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            display: flex;
+            gap: 0.2rem;
+            background: rgba(13, 20, 33, 0.95);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 50px;
+            padding: 0.25rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .lang-btn {
+            padding: 0.35rem 0.9rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .lang-btn.active {
+            background: var(--gradient-1);
+            color: var(--darker);
+        }
+        .lang-btn:hover:not(.active) { color: var(--primary); }
+
+        /* LTR lang-toggle stays centered at bottom */
+        html[dir="ltr"] .lang-toggle {
+            left: 50%;
+            right: auto;
+            transform: translateX(-50%);
+        }
+
+        /* Mobile lang-toggle */
+        @media (max-width: 768px) {
+            .lang-toggle {
+                bottom: 1rem;
+                padding: 0.2rem;
+            }
+            .lang-btn {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+            }
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(5, 8, 16, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 170, 0.08);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .nav-logo svg { width: 36px; height: 36px; }
+        .nav-logo-text {
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 8rem 5% 4rem;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(0, 212, 170, 0.08);
+            border: 1px solid rgba(0, 212, 170, 0.25);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease;
+        }
+        .hero-badge span {
+            width: 8px; height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.8s both;
+        }
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gradient-1);
+            color: var(--darker);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 2px solid rgba(255,255,255,0.15);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+        .sphere-container {
+            position: relative;
+            width: 300px; height: 300px;
+            margin: 3rem auto;
+            perspective: 1000px;
+            animation: fadeIn 2s ease 1s both;
+        }
+        .sphere {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateSphere 20s linear infinite;
+        }
+        @keyframes rotateSphere {
+            from { transform: rotateY(0deg) rotateX(15deg); }
+            to { transform: rotateY(360deg) rotateX(15deg); }
+        }
+        .sphere-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 250px; height: 250px;
+            border: 2px solid rgba(0, 212, 170, 0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulseRing 3s ease-in-out infinite;
+        }
+        .sphere-ring:nth-child(2) {
+            width: 200px; height: 200px;
+            border-color: rgba(0, 180, 216, 0.2);
+            animation-delay: 0.5s;
+        }
+        .sphere-ring:nth-child(3) {
+            width: 150px; height: 150px;
+            border-color: rgba(0, 212, 170, 0.4);
+            animation-delay: 1s;
+        }
+        .sphere-core {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80px; height: 80px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 60px rgba(0, 212, 170, 0.4);
+            animation: corePulse 2s ease-in-out infinite;
+        }
+        @keyframes pulseRing {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+        @keyframes corePulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 212, 170, 0.3); }
+            50% { box-shadow: 0 0 80px rgba(0, 212, 170, 0.6); }
+        }
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 5%;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-label {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(0, 212, 170, 0.08);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .problem-card {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s;
+        }
+        .problem-card:hover {
+            background: var(--card-hover);
+            transform: translateY(-5px);
+            border-color: rgba(0, 212, 170, 0.15);
+        }
+        .problem-card:hover::before { transform: scaleX(1); }
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        .problem-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .solution-section {
+            background: linear-gradient(180deg, var(--darker) 0%, var(--dark) 50%, var(--darker) 100%);
+        }
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .solution-content h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .solution-content .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .solution-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .solution-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .solution-feature-icon {
+            width: 50px; height: 50px;
+            min-width: 50px;
+            background: rgba(0, 212, 170, 0.08);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .solution-feature-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+        .solution-feature-text p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .solution-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .solution-sphere {
+            width: 350px; height: 350px;
+            position: relative;
+        }
+        .solution-sphere-inner {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 212, 170, 0.2), rgba(0, 180, 216, 0.08), transparent);
+            border: 2px solid rgba(0, 212, 170, 0.2);
+            position: relative;
+            animation: floatSphere 6s ease-in-out infinite;
+        }
+        @keyframes floatSphere {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .orbit {
+            position: absolute;
+            top: 50%; left: 50%;
+            border: 1px dashed rgba(255,255,255,0.08);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbitRotate 15s linear infinite;
+        }
+        .orbit-1 { width: 450px; height: 450px; }
+        .orbit-2 { width: 550px; height: 550px; animation-direction: reverse; animation-duration: 20s; }
+        @keyframes orbitRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .orbit-dot {
+            position: absolute;
+            width: 12px; height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            top: -6px; left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px var(--primary);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            bottom: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.03), transparent 70%);
+            transition: all 0.4s;
+            opacity: 0;
+        }
+        .feature-card:hover::after { opacity: 1; }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 212, 170, 0.15);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .feature-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(0, 212, 170, 0.15);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .market-section { background: var(--dark); }
+        .market-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .market-size {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .market-size-number {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .market-size-label {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+        .comparison-table {
+            background: var(--card);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 170, 0.06);
+        }
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .comparison-row:hover { background: rgba(255,255,255,0.02); }
+        .comparison-row.header {
+            background: rgba(0, 212, 170, 0.04);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .comparison-row.iseh {
+            background: rgba(0, 212, 170, 0.06);
+            border-right: 3px solid var(--primary);
+        }
+        .comparison-row.iseh .comp-label {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .comp-label { font-weight: 500; }
+        .comp-value { text-align: center; font-size: 0.9rem; }
+        .comp-value.yes { color: var(--primary); font-weight: 700; }
+        .comp-value.no { color: #ff6b6b; }
+        .comp-value.partial { color: var(--text-muted); }
+        .roadmap {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .roadmap::before {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            right: 20px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+        .roadmap-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .roadmap-dot {
+            width: 42px; height: 42px;
+            min-width: 42px;
+            background: var(--card);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
+        }
+        .roadmap-content {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            flex: 1;
+            transition: all 0.3s;
+        }
+        .roadmap-content:hover {
+            border-color: rgba(0, 212, 170, 0.2);
+            transform: translateX(-5px);
+        }
+        .roadmap-date {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .roadmap-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .roadmap-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .ask-section {
+            background: linear-gradient(135deg, var(--darker) 0%, #0d1425 100%);
+            text-align: center;
+        }
+        .ask-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 3rem auto;
+        }
+        .ask-card {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            text-align: center;
+        }
+        .ask-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.08);
+        }
+        .ask-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .ask-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        .ask-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .ask-card .price {
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .founder-section { background: var(--dark); }
+        .founder-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 32px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .founder-card::before {
+            content: '';
+            position: absolute;
+            top: -100px; left: 50%;
+            transform: translateX(-50%);
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.12), transparent 70%);
+        }
+        .founder-avatar {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 2rem;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.25);
+        }
+        .founder-name {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .founder-location {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .founder-quote {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: var(--text-muted);
+            font-style: italic;
+            position: relative;
+        }
+        .founder-quote::before,
+        .founder-quote::after {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+        }
+        .founder-quote::before {
+            top: -20px;
+            right: -20px;
+        }
+        .founder-quote::after {
+            content: '"';
+            bottom: -40px;
+            left: -20px;
+        }
+        .contact-section {
+            background: var(--darker);
+            padding: 6rem 5%;
+        }
+        .contact-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .contact-form {
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.06);
+            border-radius: 32px;
+            padding: 3rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--darker);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .form-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-1);
+            color: var(--darker);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 212, 170, 0.3);
+        }
+        .form-email-display {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 212, 170, 0.04);
+            border: 1px solid rgba(0, 212, 170, 0.15);
+            border-radius: 12px;
+        }
+        .form-email-display a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(0, 212, 170, 0.06);
+            padding: 4rem 5% 2rem;
+            text-align: center;
+        }
+        .footer-logo svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        .footer-logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        .footer-tagline {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        .footer-email {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.15);
+            border-radius: 50px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            margin-bottom: 3rem;
+        }
+        .footer-email:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(0, 212, 170, 0.15);
+        }
+        .footer-bottom {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 212, 170, 0.06);
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* LTR Nav Links */
+        html[dir="ltr"] .nav-links {
+            margin-left: auto;
+            margin-right: 0;
+        }
+        html[dir="ltr"] .nav-logo {
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-stats { flex-direction: column; gap: 1.5rem; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .solution-visual { height: 300px; }
+            .comparison-row { grid-template-columns: 1fr; gap: 0.5rem; }
+            .comparison-row.header { display: none; }
+            .founder-card { padding: 2rem; }
+            .contact-form { padding: 2rem; }
+            .roadmap::before { right: 15px; }
+            .lang-toggle { top: 5rem; left: 1rem; }
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--darker); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* Three.js Hero Sphere */
+        #heroSphere {
+            width: 400px;
+            height: 400px;
+            margin: 3rem auto;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 2s ease 1s both;
+        }
+        #heroSphere canvas {
+            border-radius: 50%;
+        }
+
+        /* Founder Story Enhancement */
+        .founder-section {
+            background: linear-gradient(180deg, var(--dark) 0%, var(--darker) 100%);
+        }
+        .founder-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid rgba(0, 212, 170, 0.08);
+            border-radius: 32px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+        .founder-card:hover {
+            border-color: rgba(0, 212, 170, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+        .founder-card::before {
+            content: '';
+            position: absolute;
+            top: -150px; left: 50%;
+            transform: translateX(-50%);
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.1), transparent 70%);
+        }
+        .founder-avatar {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            position: relative;
+            box-shadow: 0 15px 50px rgba(0, 212, 170, 0.3);
+            animation: floatSphere 6s ease-in-out infinite;
+        }
+        .founder-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .founder-stat {
+            text-align: center;
+        }
+        .founder-stat-number {
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .founder-stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+        .founder-name {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+        .founder-location {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .founder-quote {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: var(--text-muted);
+            font-style: italic;
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .founder-quote::before,
+        .founder-quote::after {
+            content: '"';
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            font-family: Georgia, serif;
+        }
+        .founder-quote::before {
+            top: -20px;
+            right: -30px;
+        }
+        .founder-quote::after {
+            bottom: -40px;
+            left: -30px;
+        }
+
+        /* ==========================================
+           LTR / RTL COMPREHENSIVE FIXES
+           ========================================== */
+
+        /* Language Toggle Position */
+        html[dir="ltr"] .lang-toggle {
+            left: auto;
+            right: 1.5rem;
+        }
+
+        /* Navigation Links */
+        html[dir="ltr"] .nav-links {
+            flex-direction: row;
+        }
+        html[dir="ltr"] .nav-links a::after {
+            right: auto;
+            left: 0;
+            transform-origin: left;
+        }
+
+        /* Hero Section */
+        html[dir="ltr"] .hero {
+            text-align: center;
+        }
+        html[dir="ltr"] .hero-stats {
+            flex-direction: row;
+        }
+
+        /* Problem Cards */
+        html[dir="ltr"] .problem-card::before {
+            right: auto;
+            left: 0;
+            transform-origin: left;
+        }
+
+        /* Solution Features */
+        html[dir="ltr"] .solution-feature {
+            flex-direction: row;
+        }
+
+        /* Comparison Table */
+        html[dir="ltr"] .comparison-row {
+            direction: ltr;
+            text-align: left;
+        }
+        html[dir="ltr"] .comparison-row.iseh {
+            border-right: none;
+            border-left: 3px solid var(--primary);
+        }
+        html[dir="ltr"] .comp-value {
+            text-align: center;
+        }
+
+        /* Roadmap */
+        html[dir="ltr"] .roadmap::before {
+            right: auto;
+            left: 20px;
+        }
+        html[dir="ltr"] .roadmap-item {
+            flex-direction: row;
+        }
+        html[dir="ltr"] .roadmap-dot {
+            margin-right: 0;
+            margin-left: 2rem;
+        }
+        html[dir="ltr"] .roadmap-content:hover {
+            transform: translateX(5px);
+        }
+
+        /* Founder */
+        html[dir="ltr"] .founder-quote::before {
+            right: auto;
+            left: -30px;
+        }
+        html[dir="ltr"] .founder-quote::after {
+            left: auto;
+            right: -30px;
+        }
+        html[dir="ltr"] .founder-stats {
+            flex-direction: row;
+        }
+
+        /* Contact Form */
+        html[dir="ltr"] .contact-form {
+            direction: ltr;
+        }
+        html[dir="ltr"] .form-group label {
+            text-align: left;
+        }
+        html[dir="ltr"] .form-group input,
+        html[dir="ltr"] .form-group textarea,
+        html[dir="ltr"] .form-group select {
+            text-align: left;
+        }
+
+        /* Footer */
+        html[dir="ltr"] footer {
+            direction: ltr;
+        }
+
+        /* General Layout Fixes for LTR */
+        html[dir="ltr"] body {
+            direction: ltr;
+        }
+        html[dir="ltr"] section {
+            direction: ltr;
+        }
+        html[dir="ltr"] .section-header {
+            direction: ltr;
+        }
+        html[dir="ltr"] .cta-group {
+            flex-direction: row;
+        }
+        html[dir="ltr"] .features-grid,
+        html[dir="ltr"] .problem-grid,
+        html[dir="ltr"] .ask-grid {
+            direction: ltr;
+        }
+        html[dir="ltr"] .feature-card,
+        html[dir="ltr"] .problem-card,
+        html[dir="ltr"] .ask-card {
+            direction: ltr;
+            text-align: left;
+        }
+        html[dir="ltr"] .feature-card h3,
+        html[dir="ltr"] .problem-card h3,
+        html[dir="ltr"] .ask-card h3 {
+            text-align: left;
+        }
+        html[dir="ltr"] .ask-card {
+            text-align: left;
+        }
+        html[dir="ltr"] .ask-card .price {
+            text-align: left;
+        }
+        html[dir="ltr"] .market-content {
+            direction: ltr;
+        }
+
+        /* Mobile LTR Fixes */
+        @media (max-width: 768px) {
+            #heroSphere {
+                width: 300px;
+                height: 300px;
+            }
+            html[dir="ltr"] .roadmap::before {
+                right: auto;
+                left: 15px;
+            }
+            html[dir="ltr"] .nav-links {
+                display: none; /* mobile menu stays same */
+            }
+            html[dir="ltr"] .solution-grid {
+                grid-template-columns: 1fr;
+            }
+            html[dir="ltr"] .comparison-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('ar')" data-lang="ar">العربية</button>
+        <button class="lang-btn" onclick="setLang('en')" data-lang="en">English</button>
+        <button class="lang-btn" onclick="setLang('de')" data-lang="de">Deutsch</button>
+    </div>
+
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-logo">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00d4aa"/>
+                        <stop offset="100%" style="stop-color:#00b4d8"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#logoGrad)" stroke-width="2" opacity="0.3"/>
+                <circle cx="50" cy="50" r="35" fill="none" stroke="url(#logoGrad)" stroke-width="1.5" opacity="0.5"/>
+                <circle cx="50" cy="50" r="25" fill="none" stroke="url(#logoGrad)" stroke-width="1" opacity="0.7"/>
+                <polygon points="50,20 60,40 80,40 65,55 70,75 50,60 30,75 35,55 20,40 40,40" fill="url(#logoGrad)" opacity="0.9"/>
+                <circle cx="50" cy="50" r="8" fill="#00d4aa"/>
+            </svg>
+            <span class="nav-logo-text">ISEH Core</span>
+        </div>
+        <div class="nav-links">
+            <a href="#problem" data-ar="المشكلة" data-en="Problem" data-de="Problem">المشكلة</a>
+            <a href="#solution" data-ar="الحل" data-en="Solution" data-de="Loesung">الحل</a>
+            <a href="#features" data-ar="المميزات" data-en="Features" data-de="Merkmale">المميزات</a>
+            <a href="#market" data-ar="السوق" data-en="Market" data-de="Markt">السوق</a>
+            <a href="#roadmap" data-ar="الخطة" data-en="Roadmap" data-de="Fahrplan">الخطة</a>
+            <a href="#founder" data-ar="من أنا" data-en="About" data-de="Ueber mich">من أنا</a>
+            <a href="#contact" data-ar="تواصل معنا" data-en="Contact Us" data-de="Kontakt">تواصل معنا</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span></span>
+            <span data-ar="من أجل 720 مليون إنسان" data-en="For 720 Million People" data-de="Fuer 720 Millionen Menschen">من أجل 720 مليون إنسان</span>
+        </div>
+        <h1>
+            <span data-ar="الطاقة التي" data-en="The Energy" data-de="Die Energie">الطاقة التي</span><br>
+            <span class="gradient-text" data-ar="لا تتوقف" data-en="That Never Stops" data-de="Die Niemals Aufhoert">لا تتوقف</span>
+        </h1>
+        <p class="hero-subtitle" data-ar="أول منظومة طاقة كروية هجينة مستقلة في العالم — مصنوعة من أجل الـ 720 مليون المنسيين" data-en="The world's first independent spherical hybrid energy system — built for the forgotten 720 million." data-de="Das weltweit erste unabhaengige sphaerische hybride Energiesystem — gebaut fuer die vergessenen 720 Millionen.">أول منظومة طاقة كروية هجينة مستقلة في العالم — مصنوعة من أجل الـ 720 مليون المنسيين</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-number">720M</div>
+                <div class="hero-stat-label" data-ar="بلا كهرباء" data-en="Without Power" data-de="Ohne Strom">بلا كهرباء</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">24/7</div>
+                <div class="hero-stat-label" data-ar="عمل مستمر" data-en="Always On" data-de="Immer An">عمل مستمر</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">0</div>
+                <div class="hero-stat-label" data-ar="صيانة" data-en="Maintenance" data-de="Wartung">صيانة</div>
+            </div>
+        </div>
+        <div class="cta-group">
+            <a href="#contact" class="btn-primary">
+                <span data-ar="ادعم الفكرة" data-en="Support the Vision" data-de="Unterstuetze die Vision">ادعم الفكرة</span> ⚡
+            </a>
+            <a href="#solution" class="btn-secondary" data-ar="اكتشف المزيد" data-en="Discover More" data-de="Mehr Entdecken">اكتشف المزيد</a>
+        </div>
+
+        <div id="heroSphere"></div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="المشكلة" data-en="PROBLEM" data-de="PROBLEM">المشكلة</div>
+            <h2 class="section-title" data-ar="720 مليون إنسان. صفر كهرباء." data-en="720 Million People. Zero Electricity." data-de="720 Millionen Menschen. Null Elektrizitaet.">720 مليون إنسان. صفر كهرباء.</h2>
+            <p class="section-subtitle" data-ar="الألواح الشمسية التقليدية تحتاج توجيهاً دقيقاً، تركيباً متخصصاً، وتتوقف ليلاً — حين تحتاجها الأسر أكثر" data-en="Traditional solar panels need precise tracking, expert installation, and stop at night — when families need power the most." data-de="Traditionelle Solarpaneele brauchen praezise Nachfuehrung, fachkundige Installation und hoeren nachts auf — wenn Familien Strom am dringendsten brauchen.">الألواح الشمسية التقليدية تحتاج توجيهاً دقيقاً، تركيباً متخصصاً، وتتوقف ليلاً — حين تحتاجها الأسر أكثر</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card animate-on-scroll">
+                <span class="problem-icon">🎯</span>
+                <h3 data-ar="توجيه دقيق" data-en="Precise Tracking" data-de="Praezise Nachfuehrung">توجيه دقيق</h3>
+                <p data-ar="تحتاج زوايا مثالية وتتبع للشمس طوال اليوم — معقدة في المناطق النائية" data-en="Requires optimal angles and sun tracking all day — complex in remote areas." data-de="Erfordert optimale Winkel und Sonnennachfuehrung den ganzen Tag — komplex in abgelegenen Gebieten.">تحتاج زوايا مثالية وتتبع للشمس طوال اليوم — معقدة في المناطق النائية</p>
+            </div>
+            <div class="problem-card animate-on-scroll">
+                <span class="problem-icon">🌙</span>
+                <h3 data-ar="تتوقف ليلاً" data-en="Stops at Night" data-de="Hoert Nachts Auf">تتوقف ليلاً</h3>
+                <p data-ar="عندما يحتاج الناس الكهرباء أكثر، الألواح تتوقف تماماً عن العمل" data-en="When people need electricity most, panels stop working entirely." data-de="Wenn Menschen Strom am dringendsten brauchen, hoeren die Paneele komplett auf zu arbeiten.">عندما يحتاج الناس الكهرباء أكثر، الألواح تتوقف تماماً عن العمل</p>
+            </div>
+            <div class="problem-card animate-on-scroll">
+                <span class="problem-icon">🔧</span>
+                <h3 data-ar="صيانة دورية" data-en="Regular Maintenance" data-de="Regelmaessige Wartung">صيانة دورية</h3>
+                <p data-ar="تحتاج فنيين متخصصين، قطع غيار، وتنظيف مستمر — غير عملية للقرى النائية" data-en="Needs technicians, spare parts, and constant cleaning — impractical for villages." data-de="Benoetigt Techniker, Ersatzteile und staendige Reinigung — unpraktisch fuer Doerfer.">تحتاج فنيين متخصصين، قطع غيار، وتنظيف مستمر — غير عملية للقرى النائية</p>
+            </div>
+            <div class="problem-card animate-on-scroll">
+                <span class="problem-icon">🏜️</span>
+                <h3 data-ar="تفشل في الصحراء" data-en="Fails in Deserts" data-de="Versagt in Wuesten">تفشل في الصحراء</h3>
+                <p data-ar="الحرارة المفرطة والغبار يُقلّلان الكفاءة ويُقصّران العمر الافتراضي" data-en="Extreme heat and dust reduce efficiency and shorten lifespan." data-de="Extreme Hitze und Staub reduzieren die Effizienz und verkuerzen die Lebensdauer.">الحرارة المفرطة والغبار يُقلّلان الكفاءة ويُقصّران العمر الافتراضي</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution-section">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="الحل" data-en="SOLUTION" data-de="LOESUNG">الحل</div>
+            <h2 class="section-title" data-ar="ISEH Core — ضعها. تعمل." data-en="ISEH Core — Drop It. It Works." data-de="ISEH Core — Leg Es Hin. Es Funktioniert.">ISEH Core — ضعها. تعمل.</h2>
+        </div>
+        <div class="solution-grid">
+            <div class="solution-content animate-on-scroll">
+                <h2>
+                    <span data-ar="كرة واحدة =" data-en="One Sphere =" data-de="Eine Kugel =">كرة واحدة =</span><br>
+                    <span class="highlight" data-ar="كهرباء + ماء ساخن" data-en="Electricity + Hot Water" data-de="Elektrizitaet + Heisswasser">كهرباء + ماء ساخن</span><br>
+                    <span data-ar="24 ساعة يومياً" data-en="24 Hours a Day" data-de="24 Stunden Taeglich">24 ساعة يومياً</span>
+                </h2>
+                <p style="color: var(--text-muted); margin-top: 1rem; font-size: 1.1rem;" data-ar="وحدة طاقة كروية هندسية تلتقط ضوء الشمس من كل الاتجاهات في آنٍ واحد. نظام هجين: طاقة شمسية كمصدر رئيسي + تحويل حراري كمصدر إضافي." data-en="A spherical energy unit that captures sunlight from all directions simultaneously. Hybrid system: solar as primary + thermal conversion as secondary." data-de="Eine sphaerische Energieeinheit, die Sonnenlicht aus allen Richtungen gleichzeitig einfaengt. Hybridsystem: Solar als Primaerquelle + thermische Umwandlung als Sekundaerquelle.">وحدة طاقة كروية هندسية تلتقط ضوء الشمس من كل الاتجاهات في آنٍ واحد. نظام هجين: طاقة شمسية كمصدر رئيسي + تحويل حراري كمصدر إضافي.</p>
+                <div class="solution-features">
+                    <div class="solution-feature">
+                        <div class="solution-feature-icon">☀️</div>
+                        <div class="solution-feature-text">
+                            <h4 data-ar="ضوء → كهرباء" data-en="Light → Electricity" data-de="Licht → Elektrizitaet">ضوء → كهرباء</h4>
+                            <p data-ar="نهاراً: خلايا شمسية تُنتج الكهرباء الرئيسية" data-en="Daytime: Solar cells produce the main electricity." data-de="Tagsueber: Solarzellen produzieren den Hauptstrom.">نهاراً: خلايا شمسية تُنتج الكهرباء الرئيسية</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="solution-feature-icon">🌙</div>
+                        <div class="solution-feature-text">
+                            <h4 data-ar="حرارة → كهرباء" data-en="Heat → Electricity" data-de="Waerme → Elektrizitaet">حرارة → كهرباء</h4>
+                            <p data-ar="ليلاً: تحويل حراري إضافي يُبقي النظام يعمل" data-en="Night: Additional thermal conversion keeps the system running." data-de="Nacht: Zusaetzliche thermische Umwandlung haelt das System am Laufen.">ليلاً: تحويل حراري إضافي يُبقي النظام يعمل</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="solution-feature-icon">🔋</div>
+                        <div class="solution-feature-text">
+                            <h4 data-ar="تخزين مدمج" data-en="Integrated Storage" data-de="Integrierter Speicher">تخزين مدمج</h4>
+                            <p data-ar="بطارية LiFePO4 داخل الوحدة — آمنة وطويلة العمر" data-en="LiFePO4 battery inside the unit — safe and long-lasting." data-de="LiFePO4-Batterie in der Einheit — sicher und langlebig.">بطارية LiFePO4 داخل الوحدة — آمنة وطويلة العمر</p>
+                        </div>
+                    </div>
+                    <div class="solution-feature">
+                        <div class="solution-feature-icon">🌬️</div>
+                        <div class="solution-feature-text">
+                            <h4 data-ar="تبريد طبيعي" data-en="Natural Cooling" data-de="Natuerliche Kuehlung">تبريد طبيعي</h4>
+                            <p data-ar="بدون مراوح — تأثير المدخنة يُبرد الخلايا تلقائياً" data-en="No fans — chimney effect cools cells automatically." data-de="Keine Luefter — Schornsteineffekt kuehlt Zellen automatisch.">بدون مراوح — تأثير المدخنة يُبرد الخلايا تلقائياً</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="solution-visual animate-on-scroll">
+                <div class="solution-sphere">
+                    <div class="solution-sphere-inner"></div>
+                </div>
+                <div class="orbit orbit-1">
+                    <div class="orbit-dot"></div>
+                </div>
+                <div class="orbit orbit-2">
+                    <div class="orbit-dot" style="background: var(--secondary); box-shadow: 0 0 20px var(--secondary);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="المميزات" data-en="FEATURES" data-de="MERKMALE">المميزات</div>
+            <h2 class="section-title" data-ar="مبنية للعالم الحقيقي" data-en="Built for the Real World" data-de="Gebaut fuer die reale Welt">مبنية للعالم الحقيقي</h2>
+            <p class="section-subtitle" data-ar="ست مزايا تجعل ISEH Core فئة منتج جديدة كلياً" data-en="Six advantages that make ISEH Core an entirely new product category." data-de="Sechs Vorteile, die ISEH Core zu einer voellig neuen Produktkategorie machen.">ست مزايا تجعل ISEH Core فئة منتج جديدة كلياً</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">01</div>
+                <h3 data-ar="عمل 24/7" data-en="24/7 Operation" data-de="24/7 Betrieb">عمل 24/7</h3>
+                <p data-ar="طاقة نهاراً وليلاً بلا انقطاع — هجين ضوء + حرارة في وحدة واحدة" data-en="Power day and night without interruption — hybrid light + heat in one unit." data-de="Strom Tag und Nacht ohne Unterbrechung — Hybrid Licht + Waerme in einer Einheit.">طاقة نهاراً وليلاً بلا انقطاع — هجين ضوء + حرارة في وحدة واحدة</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">02</div>
+                <h3 data-ar="صيانة صفرية" data-en="Zero Maintenance" data-de="Null Wartung">صيانة صفرية</h3>
+                <p data-ar="لا أجزاء متحركة. عمر 15-20 سنة. تنظيف ذاتي بالمطر والرياح" data-en="No moving parts. 15-20 year lifespan. Self-cleaning by rain and wind." data-de="Keine beweglichen Teile. 15-20 Jahre Lebensdauer. Selbstreinigung durch Regen und Wind.">لا أجزاء متحركة. عمر 15-20 سنة. تنظيف ذاتي بالمطر والرياح</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">03</div>
+                <h3 data-ar="نشر فوري" data-en="Instant Deployment" data-de="Sofortige Bereitstellung">نشر فوري</h3>
+                <p data-ar="جاهزة للعمل في أقل من 5 دقائق. بدون أدوات. بدون خبرة" data-en="Ready to operate in under 5 minutes. No tools. No expertise." data-de="Bereit zum Betrieb in unter 5 Minuten. Keine Werkzeuge. Keine Fachkenntnisse.">جاهزة للعمل في أقل من 5 دقائق. بدون أدوات. بدون خبرة</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">04</div>
+                <h3 data-ar="مقاومة لكل الظروف" data-en="All-Weather Resistant" data-de="Wetterfest">مقاومة لكل الظروف</h3>
+                <p data-ar="صحراء / قطب / استوائي / عواصف — الشكل الكروي يتحمل الرياح حتى 150 كم/س" data-en="Desert / Arctic / Tropical / Storms — spherical shape withstands winds up to 150 km/h." data-de="Wueste / Arktis / Tropisch / Stuerme — sphaerische Form widersteht Winden bis 150 km/h.">صحراء / قطب / استوائي / عواصف — الشكل الكروي يتحمل الرياح حتى 150 كم/س</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">05</div>
+                <h3 data-ar="متكاملة بالكامل" data-en="Fully Integrated" data-de="Vollstaendig Integriert">متكاملة بالكامل</h3>
+                <p data-ar="توليد + تخزين في وحدة واحدة مغلقة — لا تحتاج بنية تحتية" data-en="Generation + storage in one sealed unit — no infrastructure needed." data-de="Erzeugung + Speicherung in einer verschlossenen Einheit — keine Infrastruktur noetig.">توليد + تخزين في وحدة واحدة مغلقة — لا تحتاج بنية تحتية</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-number">06</div>
+                <h3 data-ar="معيارية وقابلة للتوسع" data-en="Modular &amp; Scalable" data-de="Modular &amp; Skalierbar">معيارية وقابلة للتوسع</h3>
+                <p data-ar="من منزل واحد لشبكة قرية كاملة — نفس البساطة في كل مرة" data-en="From one home to an entire village grid — same simplicity every time." data-de="Von einem Haus bis zu einem ganzen Dorfnetz — gleiche Einfachheit jedes Mal.">من منزل واحد لشبكة قرية كاملة — نفس البساطة في كل مرة</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Section -->
+    <section id="market" class="market-section">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="السوق" data-en="MARKET" data-de="MARKT">السوق</div>
+            <h2 class="section-title" data-ar="سوق بـ 50 مليار دولار غير مستغل" data-en="A $50 Billion Untapped Market" data-de="Ein 50-Milliarden-Dollar-Markt">سوق بـ 50 مليار دولار غير مستغل</h2>
+        </div>
+        <div class="market-content">
+            <div class="market-size animate-on-scroll">
+                <div class="market-size-number">$50B</div>
+                <div class="market-size-label" data-ar="حجم السوق السنوي — المناطق النائية والاستجابة للكوارث" data-en="Annual market size — off-grid &amp; disaster response" data-de="Jaehrliche Marktgroesse — Off-Grid &amp; Katastrophenhilfe">حجم السوق السنوي — المناطق النائية والاستجابة للكوارث</div>
+            </div>
+            <div class="comparison-table animate-on-scroll">
+                <div class="comparison-row header">
+                    <div class="comp-label" data-ar="المنظومة" data-en="System" data-de="System">المنظومة</div>
+                    <div class="comp-value" data-ar="السعر" data-en="Price" data-de="Preis">السعر</div>
+                    <div class="comp-value" data-ar="النشر" data-en="Deploy" data-de="Einsatz">النشر</div>
+                    <div class="comp-value" data-ar="ليلاً" data-en="Night" data-de="Nacht">ليلاً</div>
+                    <div class="comp-value" data-ar="الصيانة" data-en="Maint." data-de="Wart.">الصيانة</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comp-label" data-ar="ألواح تقليدية" data-en="Traditional Panels" data-de="Traditionelle Paneele">ألواح تقليدية</div>
+                    <div class="comp-value partial" data-ar="منخفض" data-en="Low" data-de="Niedrig">منخفض</div>
+                    <div class="comp-value no" data-ar="معقد" data-en="Complex" data-de="Komplex">معقد</div>
+                    <div class="comp-value no" data-ar="لا" data-en="No" data-de="Nein">لا</div>
+                    <div class="comp-value partial" data-ar="دورية" data-en="Regular" data-de="Regelmaessig">دورية</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comp-label" data-ar="Tesla Powerwall" data-en="Tesla Powerwall" data-de="Tesla Powerwall">Tesla Powerwall</div>
+                    <div class="comp-value no" data-ar="+$10,000" data-en="+$10,000" data-de="+$10.000">+$10,000</div>
+                    <div class="comp-value no" data-ar="معقد" data-en="Complex" data-de="Komplex">معقد</div>
+                    <div class="comp-value yes" data-ar="نعم" data-en="Yes" data-de="Ja">نعم</div>
+                    <div class="comp-value partial" data-ar="متوسطة" data-en="Medium" data-de="Mittel">متوسطة</div>
+                </div>
+                <div class="comparison-row">
+                    <div class="comp-label" data-ar="مولد ديزل" data-en="Diesel Generator" data-de="Dieselgenerator">مولد ديزل</div>
+                    <div class="comp-value partial" data-ar="وقود مستمر" data-en="Fuel Cost" data-de="Brennstoffkosten">وقود مستمر</div>
+                    <div class="comp-value yes" data-ar="بسيط" data-en="Simple" data-de="Einfach">بسيط</div>
+                    <div class="comp-value yes" data-ar="نعم" data-en="Yes" data-de="Ja">نعم</div>
+                    <div class="comp-value no" data-ar="متكررة" data-en="Frequent" data-de="Haeufig">متكررة</div>
+                </div>
+                <div class="comparison-row iseh">
+                    <div class="comp-label">ISEH Core ⭐</div>
+                    <div class="comp-value yes" data-ar="في المتناول" data-en="Affordable" data-de="Erschwinglich">في المتناول</div>
+                    <div class="comp-value yes" data-ar="5 دقائق" data-en="5 Mins" data-de="5 Min.">5 دقائق</div>
+                    <div class="comp-value yes" data-ar="نعم" data-en="Yes" data-de="Ja">نعم</div>
+                    <div class="comp-value yes" data-ar="صفرية" data-en="Zero" data-de="Null">صفرية</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); margin-top: 2rem; font-size: 1.1rem;">
+                <span data-ar="لا يوجد منافس مباشر يقدم:" data-en="No direct competitor offers:" data-de="Kein direkter Konkurrent bietet:">لا يوجد منافس مباشر يقدم:</span>
+                <strong style="color: var(--primary);" data-ar="كروي + هجين + متكامل + بلا صيانة" data-en="Spherical + Hybrid + Integrated + Zero Maintenance" data-de="Sphaerisch + Hybrid + Integriert + Null Wartung">كروي + هجين + متكامل + بلا صيانة</strong>
+                <span data-ar="في وحدة واحدة محمولة" data-en="in one portable unit." data-de="in einer tragbaren Einheit.">في وحدة واحدة محمولة</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="خارطة الطريق" data-en="ROADMAP" data-de="FAHRPLAN">خارطة الطريق</div>
+            <h2 class="section-title" data-ar="من الفكرة إلى الواقع" data-en="From Idea to Reality" data-de="Von der Idee zur Realitaet">من الفكرة إلى الواقع</h2>
+        </div>
+        <div class="roadmap">
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">Q2</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date" data-ar="2026 — الآن" data-en="2026 — Now" data-de="2026 — Jetzt">2026 — الآن</div>
+                    <div class="roadmap-title" data-ar="تأمين الدعم والشراكة" data-en="Secure Support &amp; Partnerships" data-de="Sicherung von Unterstuetzung &amp; Partnerschaften">تأمين الدعم والشراكة</div>
+                    <div class="roadmap-desc" data-ar="الإطار الهندسي مكتمل، الحسابات النظرية جاهزة، نسعى لبناء النموذج الأولي" data-en="Engineering framework complete, theoretical calculations ready, seeking to build the first prototype." data-de="Ingenieurrahmen komplett, theoretische Berechnungen fertig, streben den Bau des ersten Prototyps an.">الإطار الهندسي مكتمل، الحسابات النظرية جاهزة، نسعى لبناء النموذج الأولي</div>
+                </div>
+            </div>
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">Q3</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date" data-ar="2026 — منتصف العام" data-en="2026 — Mid Year" data-de="2026 — Mitte des Jahres">2026 — منتصف العام</div>
+                    <div class="roadmap-title" data-ar="نموذج أولي 50 سم" data-en="50cm Prototype" data-de="50cm Prototyp">نموذج أولي 50 سم</div>
+                    <div class="roadmap-desc" data-ar="بناء واختبار أول وحدة حقيقية — التحقق من المفهوم والأداء" data-en="Build and test the first real unit — validate concept and performance." data-de="Bau und Test der ersten realen Einheit — Validierung von Konzept und Leistung.">بناء واختبار أول وحدة حقيقية — التحقق من المفهوم والأداء</div>
+                </div>
+            </div>
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">Q4</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date" data-ar="2026 — نهاية العام" data-en="2026 — End of Year" data-de="2026 — Jahresende">2026 — نهاية العام</div>
+                    <div class="roadmap-title" data-ar="اختبار ميداني" data-en="Field Testing" data-de="Feldt Tests">اختبار ميداني</div>
+                    <div class="roadmap-desc" data-ar="اختبار في موقع حقيقي، جمع بيانات، تحسين التصميم" data-en="Test in a real location, collect data, refine the design." data-de="Test an einem realen Standort, Datensammlung, Designverfeinerung.">اختبار في موقع حقيقي، جمع بيانات، تحسين التصميم</div>
+                </div>
+            </div>
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">Q1</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date" data-ar="2027 — بداية العام" data-en="2027 — Start" data-de="2027 — Anfang">2027 — بداية العام</div>
+                    <div class="roadmap-title" data-ar="وحدة محسّنة 1 متر" data-en="Optimized 1m Unit" data-de="Optimierte 1m Einheit">وحدة محسّنة 1 متر</div>
+                    <div class="roadmap-desc" data-ar="تصميم نهائي للإنتاج التجاري، جاهز للشراكات التصنيعية" data-en="Final design for commercial production, ready for manufacturing partnerships." data-de="Endgueltiges Design fuer kommerzielle Produktion, bereit fuer Fertigungspartnerschaften.">تصميم نهائي للإنتاج التجاري، جاهز للشراكات التصنيعية</div>
+                </div>
+            </div>
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">2027</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date">2027</div>
+                    <div class="roadmap-title" data-ar="شراكة إنتاج تجاري" data-en="Commercial Production Partnership" data-de="Kommerzielle Produktionspartnerschaft">شراكة إنتاج تجاري</div>
+                    <div class="roadmap-desc" data-ar="100 وحدة في 10 قرى نائية — إثبات النموذج التجاري" data-en="100 units in 10 remote villages — prove the commercial model." data-de="100 Einheiten in 10 abgelegenen Doerfern — Beweis des kommerziellen Modells.">100 وحدة في 10 قرى نائية — إثبات النموذج التجاري</div>
+                </div>
+            </div>
+            <div class="roadmap-item animate-on-scroll">
+                <div class="roadmap-dot">2030</div>
+                <div class="roadmap-content">
+                    <div class="roadmap-date" data-ar="2030 — الرؤية" data-en="2030 — The Vision" data-de="2030 — Die Vision">2030 — الرؤية</div>
+                    <div class="roadmap-title" data-ar="10,000 وحدة في أفريقيا وآسيا" data-en="10,000 Units in Africa &amp; Asia" data-de="10.000 Einheiten in Afrika &amp; Asien">10,000 وحدة في أفريقيا وآسيا</div>
+                    <div class="roadmap-desc" data-ar="كل وحدة = عائلة واحدة بلا كهرباء. هذا هو المؤثر." data-en="Every unit = one family without electricity. This is the impact." data-de="Jede Einheit = eine Familie ohne Strom. Das ist die Wirkung.">كل وحدة = عائلة واحدة بلا كهرباء. هذا هو المؤثر.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ask Section -->
+    <section class="ask-section">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="الدعوة" data-en="THE ASK" data-de="DIE BITTE">الدعوة</div>
+            <h2 class="section-title" data-ar="لا نطلب الملايين. نطلب فرصة." data-en="We Do Not Ask for Millions. We Ask for a Chance." data-de="Wir bitten nicht um Millionen. Wir bitten um eine Chance.">لا نطلب الملايين. نطلب فرصة.</h2>
+            <p class="section-subtitle" data-ar="نرحب بأي شكل من أشكال الدعم — مهما كان صغيراً، يصنع فارقاً حقيقياً" data-en="We welcome any form of support — no matter how small, it makes a real difference." data-de="Wir heissen jede Form der Unterstuetzung willkommen — egal wie klein, sie macht einen echten Unterschied.">نرحب بأي شكل من أشكال الدعم — مهما كان صغيراً، يصنع فارقاً حقيقياً</p>
+        </div>
+        <div class="ask-grid">
+            <div class="ask-card animate-on-scroll">
+                <div class="ask-card-icon">💰</div>
+                <h3 data-ar="دعم مالي" data-en="Financial Support" data-de="Finanzielle Unterstuetzung">دعم مالي</h3>
+                <p data-ar="500$ إلى 2,500$ لبناء أول نموذج أولي يعمل — تكاليف مكونات فقط" data-en="$500 to $2,500 to build the first working prototype — component costs only." data-de="500$ bis 2.500$ fuer den Bau des ersten funktionierenden Prototyps — nur Komponentenkosten.">500$ إلى 2,500$ لبناء أول نموذج أولي يعمل — تكاليف مكونات فقط</p>
+                <div class="price">$500–2,500</div>
+            </div>
+            <div class="ask-card animate-on-scroll">
+                <div class="ask-card-icon">🏭</div>
+                <h3 data-ar="شراكة تقنية" data-en="Technical Partnership" data-de="Technische Partnerschaft">شراكة تقنية</h3>
+                <p data-ar="الوصول إلى مختبر هندسي أو جامعة أو منشأة تصنيع للبناء والاختبار معاً" data-en="Access to an engineering lab, university, or manufacturing facility to build and test together." data-de="Zugang zu einem Ingenieurlabor, einer Universitaet oder einer Fertigungsanlage zum gemeinsamen Bauen und Testen.">الوصول إلى مختبر هندسي أو جامعة أو منشأة تصنيع للبناء والاختبار معاً</p>
+                <div class="price" data-ar="شراكة" data-en="Partnership" data-de="Partnerschaft">شراكة</div>
+            </div>
+            <div class="ask-card animate-on-scroll">
+                <div class="ask-card-icon">🤝</div>
+                <h3 data-ar="إرشاد وشبكة" data-en="Mentorship &amp; Network" data-de="Mentoring &amp; Netzwerk">إرشاد وشبكة</h3>
+                <p data-ar="توجيه من مهندسين أو رواد أعمال ذوي خبرة + تعريف بالأشخاص المناسبين" data-en="Guidance from experienced engineers or entrepreneurs + introductions to the right people." data-de="Anleitung von erfahrenen Ingenieuren oder Unternehmern + Vorstellung der richtigen Personen.">توجيه من مهندسين أو رواد أعمال ذوي خبرة + تعريف بالأشخاص المناسبين</p>
+                <div class="price" data-ar="إرشاد" data-en="Mentorship" data-de="Mentoring">إرشاد</div>
+            </div>
+            <div class="ask-card animate-on-scroll">
+                <div class="ask-card-icon">🚀</div>
+                <h3 data-ar="حاضنة أو مسرّع" data-en="Incubator or Accelerator" data-de="Inkubator oder Accelerator">حاضنة أو مسرّع</h3>
+                <p data-ar="أي برنامج يؤمن بهذه الرؤية ويريد أن يكون جزءاً من إيصالها للعالم" data-en="Any program that believes in this vision and wants to be part of bringing it to the world." data-de="Jedes Programm, das an diese Vision glaubt und Teil ihrer Umsetzung in die Welt sein moechte.">أي برنامج يؤمن بهذه الرؤية ويريد أن يكون جزءاً من إيصالها للعالم</p>
+                <div class="price" data-ar="برنامج" data-en="Program" data-de="Programm">برنامج</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Story Section -->
+    <section id="founder" class="founder-section">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="قصة المؤسس" data-en="FOUNDER STORY" data-de="GRUENDER GESCHICHTE">قصة المؤسس</div>
+            <h2 class="section-title" data-ar="من سؤال واحد إلى رؤية عالمية" data-en="From One Question to a Global Vision" data-de="Von einer Frage zu einer globalen Vision">من سؤال واحد إلى رؤية عالمية</h2>
+            <p class="section-subtitle" data-ar="كيف يمكن أن تصبح الطاقة النظيفة أبسط وأذكى ومتاحة في أي مكان؟" data-en="How can clean energy become simpler, smarter, and available anywhere?" data-de="Wie kann saubere Energie einfacher, intelligenter und ueberall verfuegbar werden?">كيف يمكن أن تصبح الطاقة النظيفة أبسط وأذكى ومتاحة في أي مكان؟</p>
+        </div>
+        <div class="founder-card animate-on-scroll">
+            <div class="founder-avatar">
+                <svg viewBox="0 0 100 100" width="70" height="70">
+                    <defs>
+                        <linearGradient id="avatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d4aa"/>
+                            <stop offset="100%" style="stop-color:#00b4d8"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="url(#avatarGrad)" stroke-width="2" opacity="0.3"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="url(#avatarGrad)" stroke-width="1.5" opacity="0.5"/>
+                    <polygon points="50,20 60,40 80,40 65,55 70,75 50,60 30,75 35,55 20,40 40,40" fill="url(#avatarGrad)" opacity="0.9"/>
+                    <circle cx="50" cy="50" r="8" fill="#00d4aa"/>
+                </svg>
+            </div>
+            <div class="founder-name">Yassin</div>
+            <div class="founder-location">
+                🇩🇿 <span data-ar="الجزائر، أفريقيا" data-en="Algeria, Africa" data-de="Algerien, Afrika">الجزائر، أفريقيا</span>
+            </div>
+
+            <div class="founder-stats">
+                <div class="founder-stat">
+                    <div class="founder-stat-number" data-target="720">0</div>
+                    <div class="founder-stat-label" data-ar="مليون بلا كهرباء" data-en="Million Without Power" data-de="Millionen ohne Strom">مليون بلا كهرباء</div>
+                </div>
+                <div class="founder-stat">
+                    <div class="founder-stat-number" data-target="15">0</div>
+                    <div class="founder-stat-label" data-ar="شهر بحث" data-en="Months Researching" data-de="Monate Forschung">شهر بحث</div>
+                </div>
+                <div class="founder-stat">
+                    <div class="founder-stat-number" data-target="50">0</div>
+                    <div class="founder-stat-label" data-ar="تصميم محسّن" data-en="Designs Refined" data-de="Designs verfeinert">تصميم محسّن</div>
+                </div>
+                <div class="founder-stat">
+                    <div class="founder-stat-number" data-target="1">0</div>
+                    <div class="founder-stat-label" data-ar="هدف واحد" data-en="Single Goal" data-de="Einziges Ziel">هدف واحد</div>
+                </div>
+            </div>
+
+            <div class="founder-quote">
+                <span data-ar="لست مهندساً بعد. ولست ثرياً." data-en="I am not an engineer yet. I am not wealthy." data-de="Ich bin noch kein Ingenieur. Ich bin nicht wohlhabend.">لست مهندساً بعد. ولست ثرياً.</span><br>
+                <span data-ar="لكنني أرى 720 مليون شخص يعيشون في الظلام — وأرى حلاً." data-en="But I see 720 million people living in darkness — and I see a solution." data-de="Aber ich sehe 720 Millionen Menschen, die in Dunkelheit leben — und ich sehe eine Loesung.">لكنني أرى 720 مليون شخص يعيشون في الظلام — وأرى حلاً.</span><br><br>
+                <span data-ar="أمضيت أكثر من عام في البحث والحساب والتحسين المستمر." data-en="I have spent over a year researching, calculating, and continuously improving." data-de="Ich habe mehr als ein Jahr mit Forschung, Berechnung und kontinuierlicher Verbesserung verbracht.">أمضيت أكثر من عام في البحث والحساب والتحسين المستمر.</span><br>
+                <span data-ar="رفضت كل اختصار. بقيت ملتزماً بما هو صادق علمياً وقابل للتنفيذ فعلياً." data-en="I rejected every shortcut. I stayed committed to what is scientifically honest and practically executable." data-de="Ich habe jede Abkuerzung abgelehnt. Ich blieb dem verpflichtet, was wissenschaftlich ehrlich und praktisch umsetzbar ist.">رفضت كل اختصار. بقيت ملتزماً بما هو صادق علمياً وقابل للتنفيذ فعلياً.</span><br><br>
+                <span data-ar="لم أأتِ لأعرض حلماً. أتيت لأجد الشريك المناسب لبنائه." data-en="I did not come to present a dream. I came to find the right partner to build it." data-de="Ich bin nicht gekommen, um einen Traum zu praesentieren. Ich bin gekommen, um den richtigen Partner zum Bauen zu finden.">لم أأتِ لأعرض حلماً. أتيت لأجد الشريك المناسب لبنائه.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="section-header animate-on-scroll">
+            <div class="section-label" data-ar="تواصل" data-en="CONTACT" data-de="KONTAKT">تواصل</div>
+            <h2 class="section-title" data-ar="كن جزءاً من الحل" data-en="Be Part of the Solution" data-de="Sei Teil der Loesung">كن جزءاً من الحل</h2>
+            <p class="section-subtitle" data-ar="كل رسالة تُقرّبنا من إضاءة عائلة واحدة" data-en="Every message brings us closer to lighting one family." data-de="Jede Nachricht bringt uns naeher, eine Familie zu erleuchten.">كل رسالة تُقرّبنا من إضاءة عائلة واحدة</p>
+        </div>
+        <div class="contact-container">
+            <form class="contact-form animate-on-scroll" action="https://formsubmit.co/yassin.dev.tech.f@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="ISEH Core - New Message">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_replyto" value="">
+                <input type="hidden" name="_next" value="https://iseh-core.com/thanks.html">
+
+                <div class="form-group">
+                    <label for="name" data-ar="الاسم" data-en="Name" data-de="Name">الاسم</label>
+                    <input type="text" id="name" name="name" data-placeholder-ar="اسمك الكامل" data-placeholder-en="Your full name" data-placeholder-de="Dein vollstaendiger Name" placeholder="اسمك الكامل" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" data-ar="البريد الإلكتروني" data-en="Email" data-de="E-Mail">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="type" data-ar="نوع الدعم" data-en="Support Type" data-de="Unterstuetzungsart">نوع الدعم</label>
+                    <select id="type" name="type" required>
+                        <option value="" data-ar="اختر نوع الدعم..." data-en="Choose support type..." data-de="Waehle Unterstuetzungsart...">اختر نوع الدعم...</option>
+                        <option value="financial" data-ar="دعم مالي" data-en="Financial Support" data-de="Finanzielle Unterstuetzung">دعم مالي</option>
+                        <option value="technical" data-ar="شراكة تقنية" data-en="Technical Partnership" data-de="Technische Partnerschaft">شراكة تقنية</option>
+                        <option value="mentorship" data-ar="إرشاد وشبكة علاقات" data-en="Mentorship &amp; Network" data-de="Mentoring &amp; Netzwerk">إرشاد وشبكة علاقات</option>
+                        <option value="incubator" data-ar="حاضنة أو مسرّع" data-en="Incubator or Accelerator" data-de="Inkubator oder Accelerator">حاضنة أو مسرّع</option>
+                        <option value="other" data-ar="أخرى" data-en="Other" data-de="Andere">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message" data-ar="الرسالة" data-en="Message" data-de="Nachricht">الرسالة</label>
+                    <textarea id="message" name="message" data-placeholder-ar="اكتب رسالتك هنا... كيف يمكنك المساعدة في إيصال ISEH Core للعالم؟" data-placeholder-en="Write your message here... How can you help bring ISEH Core to the world?" data-placeholder-de="Schreibe deine Nachricht hier... Wie kannst du helfen, ISEH Core in die Welt zu bringen?" placeholder="اكتب رسالتك هنا... كيف يمكنك المساعدة في إيصال ISEH Core للعالم؟" required></textarea>
+                </div>
+
+                <button type="submit" class="form-submit">
+                    📧 <span data-ar="إرسال الرسالة" data-en="Send Message" data-de="Nachricht Senden">إرسال الرسالة</span>
+                </button>
+                <script>
+                    // Auto-fill _replyto from email field
+                    document.getElementById('email').addEventListener('input', function() {
+                        document.querySelector('input[name="_replyto"]').value = this.value;
+                    });
+                </script>
+            </form>
+
+            <div class="form-email-display">
+                <p style="color: var(--text-muted); margin-bottom: 0.5rem;" data-ar="أو راسلني مباشرة:" data-en="Or email me directly:" data-de="Oder schreibe mir direkt:">أو راسلني مباشرة:</p>
+                <a href="mailto:yassin.dev.tech.f@gmail.com">yassin.dev.tech.f@gmail.com</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <svg viewBox="0 0 100 100" width="60" height="60">
+                <defs>
+                    <linearGradient id="footGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00d4aa"/>
+                        <stop offset="100%" style="stop-color:#00b4d8"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="none" stroke="url(#footGrad)" stroke-width="2" opacity="0.3"/>
+                <circle cx="50" cy="50" r="35" fill="none" stroke="url(#footGrad)" stroke-width="1.5" opacity="0.5"/>
+                <polygon points="50,20 60,40 80,40 65,55 70,75 50,60 30,75 35,55 20,40 40,40" fill="url(#footGrad)" opacity="0.9"/>
+                <circle cx="50" cy="50" r="8" fill="#00d4aa"/>
+            </svg>
+        </div>
+        <div class="footer-logo-text">ISEH Core</div>
+        <p class="footer-tagline" data-ar="الطاقة التي لا تتوقف — من أجل الـ 720 مليون" data-en="The Energy That Never Stops — For the 720 Million" data-de="Die Energie, die niemals aufhoert — Fuer die 720 Millionen">الطاقة التي لا تتوقف — من أجل الـ 720 مليون</p>
+        <a href="mailto:yassin.dev.tech.f@gmail.com" class="footer-email">
+            📧 yassin.dev.tech.f@gmail.com
+        </a>
+        <div class="footer-bottom">
+            <p>ISEH Core — Integrated Spherical Energy Harvester</p>
+            <p style="margin-top: 0.5rem;">
+                🇩🇿 <span data-ar="الجزائر" data-en="Algeria" data-de="Algerien">الجزائر</span> | <span data-ar="أفريقيا" data-en="Africa" data-de="Afrika">أفريقيا</span> | <span data-ar="العالم" data-en="The World" data-de="Die Welt">العالم</span> 🌍
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; opacity: 0.5;" data-ar="صُنع بالطموح — من أجل مستقبل يضيء للجميع" data-en="Built with ambition — For a future that lights up everyone." data-de="Mit Ehrgeiz gebaut — Fuer eine Zukunft, die alle erleuchtet.">
+                صُنع بالطموح — من أجل مستقبل يضيء للجميع
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+        // ==========================================
+        // LANGUAGE SWITCHER - Enhanced RTL/LTR
+        // ==========================================
+        let currentLang = 'ar';
+
+        function switchLanguage(lang) {
+            const html = document.documentElement;
+            currentLang = lang;
+
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                const text = el.getAttribute('data-' + lang);
+                if (!text) return;
+
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    const placeholder = el.getAttribute('data-placeholder-' + lang);
+                    if (placeholder) el.placeholder = placeholder;
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = text;
+                } else {
+                    el.textContent = text;
+                }
+            });
+
+            // Set direction and lang
+            if (lang === 'ar') {
+                html.setAttribute('lang', 'ar');
+                html.setAttribute('dir', 'rtl');
+            } else if (lang === 'en') {
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+            } else if (lang === 'de') {
+                html.setAttribute('lang', 'de');
+                html.setAttribute('dir', 'ltr');
+            }
+
+            // Force reflow for layout recalculation
+            document.body.style.display = 'none';
+            document.body.offsetHeight; // trigger reflow
+            document.body.style.display = '';
+        }
+
+        // Alias for backward compatibility
+        function setLang(lang) {
+            switchLanguage(lang);
+        }
+
+        // ==========================================
+        // THREE.JS - Real Icosahedron Sphere
+        // ==========================================
+        const container = document.getElementById('heroSphere');
+
+        if (container) {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / 400, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+            renderer.setSize(container.clientWidth, 400);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            // Create icosahedron with wireframe
+            const geometry = new THREE.IcosahedronGeometry(1.4, 1);
+
+            // Main mesh - solid with transparency
+            const materialSolid = new THREE.MeshStandardMaterial({
+                color: 0x00d4aa,
+                transparent: true,
+                opacity: 0.15,
+                roughness: 0.2,
+                metalness: 0.8,
+                emissive: 0x00b4d8,
+                emissiveIntensity: 0.2
+            });
+
+            const sphereSolid = new THREE.Mesh(geometry, materialSolid);
+            scene.add(sphereSolid);
+
+            // Wireframe overlay
+            const materialWire = new THREE.MeshBasicMaterial({
+                color: 0x00d4aa,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.6
+            });
+
+            const sphereWire = new THREE.Mesh(geometry, materialWire);
+            scene.add(sphereWire);
+
+            // Inner core glow
+            const coreGeometry = new THREE.IcosahedronGeometry(0.4, 1);
+            const coreMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00d4aa,
+                transparent: true,
+                opacity: 0.9
+            });
+            const coreSphere = new THREE.Mesh(coreGeometry, coreMaterial);
+            scene.add(coreSphere);
+
+            // Particle ring around sphere
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 200;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 5;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.02,
+                color: 0x00d4aa,
+                transparent: true,
+                opacity: 0.8
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            // Lights
+            const light1 = new THREE.PointLight(0x00d4aa, 2, 50);
+            light1.position.set(5, 5, 5);
+            scene.add(light1);
+
+            const light2 = new THREE.PointLight(0x00b4d8, 2, 50);
+            light2.position.set(-5, -5, -5);
+            scene.add(light2);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+
+            camera.position.z = 4;
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                targetX = mouseX * 0.5;
+                targetY = mouseY * 0.5;
+
+                sphereSolid.rotation.y += 0.005;
+                sphereSolid.rotation.x += 0.002;
+                sphereSolid.rotation.y += (targetX - sphereSolid.rotation.y) * 0.02;
+                sphereSolid.rotation.x += (targetY - sphereSolid.rotation.x) * 0.02;
+
+                sphereWire.rotation.y = sphereSolid.rotation.y;
+                sphereWire.rotation.x = sphereSolid.rotation.x;
+
+                coreSphere.rotation.y -= 0.01;
+                coreSphere.rotation.x += 0.005;
+
+                particlesMesh.rotation.y += 0.001;
+                particlesMesh.rotation.x += 0.0005;
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                if (container.clientWidth > 0) {
+                    renderer.setSize(container.clientWidth, 400);
+                    camera.aspect = container.clientWidth / 400;
+                    camera.updateProjectionMatrix();
+                }
+            });
+        }
+
+        // ==========================================
+        // SCROLL ANIMATION
+        // ==========================================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ==========================================
+        // SMOOTH SCROLL
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ==========================================
+        // NAVBAR BACKGROUND
+        // ==========================================
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            nav.style.background = window.scrollY > 100 ? 'rgba(5, 8, 16, 0.95)' : 'rgba(5, 8, 16, 0.85)';
+        });
+
+        // ==========================================
+        // FOUNDER STORY ENHANCEMENT
+        // ==========================================
+        // Add counter animation for founder stats
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        const founderObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.founder-stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.dataset.target);
+                        if (target) animateValue(stat, 0, target, 2000);
+                    });
+                    founderObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const founderCard = document.querySelector('.founder-card');
+        if (founderCard) founderObserver.observe(founderCard);
+    </script>
+
+</body>
+</html>
